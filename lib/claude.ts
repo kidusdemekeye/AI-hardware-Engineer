@@ -12,7 +12,7 @@ export async function generateQuestions(
   const contentBlocks: any[] = [
     {
       type: "text",
-      text: `You are an expert hardware engineer. Ask 5-7 critical clarifying questions to understand the user's project requirements. Return a JSON object with a 'questions' array where each item has {id: string, question: string, hint?: string}.
+      text: `You are an expert hardware engineer. Ask 5-7 critical clarifying questions to understand the user's project requirements. Return ONLY a valid JSON object (no markdown, no code blocks) with a 'questions' array where each item has {id: string, question: string, hint?: string}.
 
 User's project description:
 ${description}`,
@@ -50,7 +50,12 @@ ${description}`,
   }
 
   try {
-    const parsed = JSON.parse(textContent.text);
+    let jsonText = textContent.text.trim();
+    // Strip markdown code blocks if present
+    if (jsonText.startsWith("```")) {
+      jsonText = jsonText.replace(/^```json?\n?/, "").replace(/\n?```$/, "");
+    }
+    const parsed = JSON.parse(jsonText);
     if (!parsed.questions || !Array.isArray(parsed.questions)) {
       throw new Error("Invalid response format: missing questions array");
     }
@@ -75,7 +80,7 @@ export async function generateDesign(
   const contentBlocks: any[] = [
     {
       type: "text",
-      text: `You are an expert hardware engineer. Generate a complete design specification for the given project. Return a JSON object with:
+      text: `You are an expert hardware engineer. Generate a complete design specification for the given project. Return ONLY valid JSON (no markdown, no code blocks) with:
 - projectName: string
 - description: string
 - parts: array of {id, name, quantity, supplier, link, price, notes}
@@ -90,7 +95,7 @@ ${description}
 Q&A with user:
 ${qaText}
 
-Generate realistic parts with real supplier links and current prices. Return valid JSON only.`,
+Generate realistic parts with real supplier links and current prices.`,
     },
   ];
 
@@ -124,7 +129,12 @@ Generate realistic parts with real supplier links and current prices. Return val
   }
 
   try {
-    const parsed = JSON.parse(textContent.text);
+    let jsonText = textContent.text.trim();
+    // Strip markdown code blocks if present
+    if (jsonText.startsWith("```")) {
+      jsonText = jsonText.replace(/^```json?\n?/, "").replace(/\n?```$/, "");
+    }
+    const parsed = JSON.parse(jsonText);
     return {
       id: Date.now().toString(),
       projectName: parsed.projectName || "Untitled Project",
