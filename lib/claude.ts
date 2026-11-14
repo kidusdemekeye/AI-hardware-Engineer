@@ -34,7 +34,7 @@ ${description}`,
   }
 
   const response = await client.messages.create({
-    model: "claude-opus-4-1",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -108,7 +108,7 @@ Generate realistic parts with real supplier links and current prices. Return val
   }
 
   const response = await client.messages.create({
-    model: "claude-opus-4-1",
+    model: "claude-opus-5-5",
     max_tokens: 4096,
     messages: [
       {
