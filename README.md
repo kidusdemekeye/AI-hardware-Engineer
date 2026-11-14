@@ -64,3 +64,7 @@ Push to GitHub and deploy to Vercel:
 5. User can download all deliverables
 
 **Phase 2:** Physics simulation (MuJoCo WASM) to validate designs
+
+## Live Demo
+
+View the live app: [Deploy to Vercel](https://vercel.com/new)
