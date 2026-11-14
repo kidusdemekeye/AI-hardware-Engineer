@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { UploadForm } from "@/components/UploadForm";
 import { QuestionsList } from "@/components/QuestionsList";
-import { Question } from "@/lib/types";
+import { DesignDisplay } from "@/components/DesignDisplay";
+import { Question, Design } from "@/lib/types";
 
 export default function Home() {
   const [step, setStep] = useState<"input" | "questions" | "design">("input");
@@ -12,11 +13,14 @@ export default function Home() {
   const [description, setDescription] = useState("");
   const [imageBase64s, setImageBase64s] = useState<string[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [design, setDesign] = useState<Design | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("hw_design");
     if (saved) {
       try {
+        const parsed = JSON.parse(saved);
+        setDesign(parsed);
         setStep("design");
       } catch (e) {
         localStorage.removeItem("hw_design");
@@ -71,6 +75,7 @@ export default function Home() {
       if (!data.success) throw new Error(data.error);
 
       localStorage.setItem("hw_design", JSON.stringify(data.data.design));
+      setDesign(data.data.design);
       setStep("design");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to generate design");
@@ -112,9 +117,9 @@ export default function Home() {
           </div>
         )}
 
-        {step === "design" && (
+        {step === "design" && design && (
           <div className="bg-slate-700/50 backdrop-blur border border-slate-600 rounded-lg p-8">
-            <p className="text-slate-300">Design display coming soon...</p>
+            <DesignDisplay design={design} />
           </div>
         )}
       </div>
