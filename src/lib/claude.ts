@@ -9,7 +9,7 @@ export async function generateQuestions(
   description: string,
   imageBase64s?: string[]
 ): Promise<{ questions: Question[] }> {
-  const contentBlocks: Anthropic.ContentBlockParam[] = [
+  const contentBlocks: any[] = [
     {
       type: "text",
       text: `You are an expert hardware engineer. Ask 5-7 critical clarifying questions to understand the user's project requirements. Return a JSON object with a 'questions' array where each item has {id: string, question: string, hint?: string}.
@@ -72,7 +72,7 @@ export async function generateDesign(
     .map((q) => `Q: ${q.question}\nA: ${answers[q.id] || ""}`)
     .join("\n\n");
 
-  const contentBlocks: Anthropic.ContentBlockParam[] = [
+  const contentBlocks: any[] = [
     {
       type: "text",
       text: `You are an expert hardware engineer. Generate a complete design specification for the given project. Return a JSON object with:
