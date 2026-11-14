@@ -51,9 +51,12 @@ ${description}`,
 
   try {
     let jsonText = textContent.text.trim();
-    // Strip markdown code blocks if present
-    if (jsonText.startsWith("```")) {
-      jsonText = jsonText.replace(/^```json?\n?/, "").replace(/\n?```$/, "");
+    // Strip markdown code blocks
+    jsonText = jsonText.replace(/^```(json)?\s*\n?/, "").replace(/\n?```\s*$/, "");
+    // Extract JSON object if wrapped in text
+    const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      jsonText = jsonMatch[0];
     }
     const parsed = JSON.parse(jsonText);
     if (!parsed.questions || !Array.isArray(parsed.questions)) {
@@ -130,9 +133,12 @@ Generate realistic parts with real supplier links and current prices.`,
 
   try {
     let jsonText = textContent.text.trim();
-    // Strip markdown code blocks if present
-    if (jsonText.startsWith("```")) {
-      jsonText = jsonText.replace(/^```json?\n?/, "").replace(/\n?```$/, "");
+    // Strip markdown code blocks
+    jsonText = jsonText.replace(/^```(json)?\s*\n?/, "").replace(/\n?```\s*$/, "");
+    // Extract JSON object if wrapped in text
+    const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      jsonText = jsonMatch[0];
     }
     const parsed = JSON.parse(jsonText);
     return {
